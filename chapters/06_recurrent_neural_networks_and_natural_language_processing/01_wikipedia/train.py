@@ -26,21 +26,22 @@ target = tf.placeholder(tf.int32, [None])
 model = EmbeddingModel(data, target, params)
 
 corpus = Wikipedia(
-    'https://dumps.wikimedia.org/enwiki/20160501/'
-    'enwiki-20160501-pages-meta-current1.xml-p000000010p000030303.bz2',
+    'https://dumps.wikimedia.org/enwiki/20180201/enwiki-20180201-pages-meta-current1.xml-p10p30303.bz2',
     WIKI_DOWNLOAD_DIR,
     params.vocabulary_size)
 examples = skipgrams(corpus, params.max_context)
 batches = batched(examples, params.batch_size)
 
 sess = tf.Session()
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer())
 average = collections.deque(maxlen=100)
 for index, batch in enumerate(batches):
     feed_dict = {data: batch[0], target: batch[1]}
     cost, _ = sess.run([model.cost, model.optimize], feed_dict)
     average.append(cost)
-    print('{}: {:5.1f}'.format(index + 1, sum(average) / len(average)))
+    if index % params.batch_size == 0:
+        print('{}: {:5.1f}'.format(index, sum(average) / len(average)))
+        average.clear()
     if index > 100000:
         break
 

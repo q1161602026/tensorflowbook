@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 
 from helpers import lazy_property
 
@@ -36,6 +35,6 @@ class EmbeddingModel:
         bias = tf.Variable(tf.zeros([self.params.vocabulary_size]))
         target = tf.expand_dims(self.target, 1)
         return tf.reduce_mean(tf.nn.nce_loss(
-            weight, bias, embedded, target,
+            weight, bias, target, embedded,
             self.params.contrastive_examples,
             self.params.vocabulary_size))
