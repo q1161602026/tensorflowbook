@@ -1,4 +1,3 @@
-import bz2
 import numpy as np
 
 
@@ -6,7 +5,7 @@ class Embedding:
 
     def __init__(self, vocabulary_path, embedding_path, length):
         self._embedding = np.load(embedding_path)
-        with bz2.open(vocabulary_path, 'rt') as file_:
+        with open(vocabulary_path, 'rt') as file_:
             self._vocabulary = {k.strip(): i for i, k in enumerate(file_)}
         self._length = length
 
