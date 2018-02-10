@@ -1,5 +1,3 @@
-import random
-
 import tensorflow as tf
 import numpy as np
 
@@ -18,6 +16,7 @@ params = AttrDict(
     epochs=5,
     epoch_size=50
 )
+
 
 def get_dataset():
     dataset = OcrDataset('./ocr')
@@ -50,7 +49,9 @@ model = SequenceLabellingModel(data, target, params)
 batches = batched(train_data, train_target, params.batch_size)
 
 sess = tf.Session()
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer())
+error = None
+
 for index, batch in enumerate(batches):
     batch_data = batch[0]
     batch_target = batch[1]
@@ -59,8 +60,9 @@ for index, batch in enumerate(batches):
         break
     feed = {data: batch_data, target: batch_target}
     error, _ = sess.run([model.error, model.optimize], feed)
-    print('{}: {:3.6f}%'.format(index + 1, 100 * error))
+    if index % params.epoch_size == 0:
+        print('{}: {:3.2f}%'.format(index, 100 * error))
 
 test_feed = {data: test_data, target: test_target}
 test_error, _ = sess.run([model.error, model.optimize], test_feed)
-print('Test error: {:3.6f}%'.format(100 * error))
+print('Test error: {:3.2f}%'.format(100 * error))

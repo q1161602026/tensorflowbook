@@ -1,8 +1,7 @@
 import os
 import shutil
 import errno
-from lxml import etree
-from urllib.request import urlopen
+from urllib import urlopen
 
 
 def ensure_directory(directory):
@@ -31,6 +30,7 @@ def download(url, directory, filename=None):
     if os.path.isfile(filepath):
         return filepath
     print('Download', filepath)
-    with urlopen(url) as response, open(filepath, 'wb') as file_:
+    with open(filepath, 'wb') as file_:
+        response = urlopen(url)
         shutil.copyfileobj(response, file_)
     return filepath

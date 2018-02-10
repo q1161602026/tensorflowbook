@@ -21,4 +21,3 @@ def batched(data, target, batch_size):
         batch_data = data[offset:(offset + batch_size), :]
         batch_target = target[offset:(offset + batch_size), :]
         yield batch_data, batch_target, epoch
-        

@@ -17,7 +17,7 @@ class OcrDataset:
     URL = 'http://ai.stanford.edu/~btaskar/ocr/letter.data.gz'
 
     def __init__(self, cache_dir):
-        path = download(type(self).URL, cache_dir)
+        path = download(self.URL, cache_dir)
         lines = self._read(path)
         data, target = self._parse(lines)
         self.data, self.target = self._pad(data, target)
@@ -31,7 +31,7 @@ class OcrDataset:
 
     @staticmethod
     def _parse(lines):
-        lines = sorted(lines, key=lambda x: int(x[0]))
+        lines = sorted(lines, key=lambda z: int(z[0]))
         data, target = [], []
         next_ = None
         for line in lines:

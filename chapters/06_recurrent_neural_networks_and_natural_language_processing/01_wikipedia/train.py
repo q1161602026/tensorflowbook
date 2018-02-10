@@ -34,14 +34,11 @@ batches = batched(examples, params.batch_size)
 
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
-average = collections.deque(maxlen=100)
 for index, batch in enumerate(batches):
     feed_dict = {data: batch[0], target: batch[1]}
     cost, _ = sess.run([model.cost, model.optimize], feed_dict)
-    average.append(cost)
     if index % params.batch_size == 0:
-        print('{}: {:5.1f}'.format(index, sum(average) / len(average)))
-        average.clear()
+        print('{}: {:5.1f}'.format(index, cost))
     if index > 100000:
         break
 

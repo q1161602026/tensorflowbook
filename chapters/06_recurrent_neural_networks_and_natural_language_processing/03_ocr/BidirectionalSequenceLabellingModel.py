@@ -43,7 +43,7 @@ class BidirectionalSequenceLabellingModel:
             sequence_length=self.length,
             scope='rnn-backward')
         backward = tf.reverse_sequence(backward, length_64, seq_dim=1)
-        output = tf.concat(2, [forward, backward])
+        output = tf.concat([forward, backward], 2)
         return output
 
     def _shared_softmax(self, data, out_size):
